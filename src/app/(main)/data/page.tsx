@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { BiPlusMedical, BiRefresh } from "react-icons/bi";
+import React, {useEffect, useState} from "react";
+import {BiPlusMedical, BiRefresh} from "react-icons/bi";
 import {message, Table} from "antd";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import useTabStore, { TabStore } from "@/app/context/Tab/TabStore";
+import useTabStore, {TabStore} from "@/app/context/Tab/TabStore";
 import useStore from "@/app/context/Tab/useStore";
 import AddModalLayout from "@/app/components/Pages/Master/Raw/AddModal";
 import dayjs from "dayjs";
@@ -192,7 +192,7 @@ export default function Data() {
       {contextHolder}
       <div className={`bg-white h-full flex flex-col`}>
         {modal && (
-          <AddModalLayout close={() => setModal(false)} onSubmit={handleSubmit(submitImport)} reset={reset}
+          <AddModalLayout close={() => setModal(false)} onSubmit={handleSubmit(submitImport)}
                           register={register}/>)}
 
         <div className="w-full bg-base py-0.5 px-1 text-white flex flex-row">
