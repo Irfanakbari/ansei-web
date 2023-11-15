@@ -1,7 +1,7 @@
 import {FaRegWindowMaximize} from "react-icons/fa";
 import {ImCross} from "react-icons/im";
 
-export default function ModalLayout({children, onSubmit, close}) {
+export default function ModalLayout({children, onSubmit, close}: {children:any, onSubmit:any, close:any}) {
     return (
         <div
             className="fixed bg-black bg-opacity-20 h-full flex items-center justify-center top-0 left-0 z-[5000] w-full overflow-y-auto overflow-x-hidden outline-none">
