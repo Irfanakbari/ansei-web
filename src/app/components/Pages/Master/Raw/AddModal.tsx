@@ -1,6 +1,6 @@
 import ModalLayout from "../../../Modal/AddModalLayout";
 
-export default function AddModalLayout({onSubmit, reset, register, close}) {
+export default function AddModalLayout({onSubmit, reset, register, close}: {onSubmit: any, reset:any, register:any, close:any}) {
     return (
         <ModalLayout onSubmit={onSubmit} reset={reset} close={close}>
             <div className="border border-gray-300 w-full p-3 flex flex-col gap-3 text-sm">
