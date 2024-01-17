@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { BiRefresh } from "react-icons/bi";
+import React, {useEffect, useState} from "react";
+import {BiRefresh} from "react-icons/bi";
 import {Button, DatePicker, message, Space, Table} from "antd";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import useTabStore, { TabStore } from "@/app/context/Tab/TabStore";
+import useTabStore, {TabStore} from "@/app/context/Tab/TabStore";
 import useStore from "@/app/context/Tab/useStore";
 import dayjs from "dayjs";
 import {CalendarOutlined} from "@ant-design/icons";
@@ -81,18 +81,11 @@ export default function History() {
       render: (_: any, __: any, index: any) => (data.currentPage - 1) * data.limit + index + 1
     },
     {
-      title: 'Kode PCC',
-      dataIndex: 'barcode_pcc',
+      title: 'Part Number',
+      dataIndex: 'part_number',
       onFilter: (value: any, record: any) =>
-          record['barcode_pcc'].toString().toLowerCase().includes(value.toLowerCase()),
-      sorter: (a: any, b: any) => a.barcode_pcc.localeCompare(b.barcode_pcc),
-    },
-    {
-      title: 'Kode Part',
-      dataIndex: 'id_part',
-      onFilter: (value: any, record: any) =>
-          record['id_part'].toString().toLowerCase().includes(value.toLowerCase()),
-      sorter: (a: any, b: any) => a.id_part.localeCompare(b.id_part),
+          record['part_number'].toString().toLowerCase().includes(value.toLowerCase()),
+      sorter: (a: any, b: any) => a.part_number.localeCompare(b.part_number),
     },
     {
       title: 'TimeStamp',
