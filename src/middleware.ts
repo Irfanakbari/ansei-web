@@ -1,11 +1,11 @@
-import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
-import { authOptions } from "@/lib/authOption";
+import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
+import { authOptions } from '@/lib/authOption';
 
 export default withAuth(
   function middleware(req: NextRequestWithAuth) {
     const { token } = req.nextauth;
-    if (!token || !token.user) {
+    if (!token ) {
       return NextResponse.rewrite(new URL('/block', req.url))
     }
       const hasRole = token.user.roles

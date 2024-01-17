@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
-import { message } from "antd";
+import React, {useEffect} from "react";
+import {useRouter} from "next/navigation";
+import {signIn, useSession} from "next-auth/react";
+import {message} from "antd";
 import {LoadingSpin} from "@/app/components/LoadingSpin";
 
 export default function Home() {
@@ -18,9 +18,7 @@ export default function Home() {
       signIn('keycloak',{prompt: 'none'})
     }
   }, [status, router, session]);
-
-
-
+  
   return (
       <>
         {contextHolder}

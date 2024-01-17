@@ -1,8 +1,8 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
-import axios from "@/lib/axios";
-import { redirect, useRouter } from "next/navigation";
+import { signIn, signOut, useSession } from 'next-auth/react';
+import axios from '@/lib/axios';
+import { redirect, useRouter } from 'next/navigation';
 
 export const useRefreshToken = () => {
   const { data: session, update } = useSession({
@@ -27,7 +27,7 @@ export const useRefreshToken = () => {
          accessToken: res.data.accessToken
        })
      } else {
-       signOut({
+       await signOut({
          redirect: true
        })
      }

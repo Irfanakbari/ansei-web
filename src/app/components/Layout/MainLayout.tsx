@@ -6,7 +6,7 @@ import MainMenu from "../Menu/MainMenu";
 import useTabStore, {Tab, TabStore} from "../../context/Tab/TabStore";
 import {useRouter} from "next/navigation";
 import useStore from "@/app/context/Tab/useStore";
-import {master} from "@/const/menu";
+import {laporan, master} from "@/const/menu";
 
 
 export default function MainLayout({children}: {children: any}) {
@@ -32,6 +32,8 @@ export default function MainLayout({children}: {children: any}) {
                 <div className={`py-2`}>
                     <div className={`w-full py-1.5 flex bg-[#EBEBEB] text-sm font-semibold`}>
                         <MainMenu data={master} title={'Master Data'}/>
+                        <MainMenu data={laporan} title={'Laporan'}/>
+
                         {/*<MainMenu data={laporan} title={'Laporan'}/>*/}
                     </div>
                 </div>
