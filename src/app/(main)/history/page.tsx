@@ -81,11 +81,18 @@ export default function History() {
       render: (_: any, __: any, index: any) => (data.currentPage - 1) * data.limit + index + 1
     },
     {
-      title: 'Part Number',
-      dataIndex: 'part_number',
+      title: 'PO Number',
+      dataIndex: 'po_number',
       onFilter: (value: any, record: any) =>
-          record['part_number'].toString().toLowerCase().includes(value.toLowerCase()),
-      sorter: (a: any, b: any) => a.part_number.localeCompare(b.part_number),
+          record['po_number'].toString().toLowerCase().includes(value.toLowerCase()),
+      sorter: (a: any, b: any) => a.po_number.localeCompare(b.po_number),
+    },
+    {
+      title: 'Part Number',
+      dataIndex: 'parts_number',
+      onFilter: (value: any, record: any) =>
+          record['parts_number'].toString().toLowerCase().includes(value.toLowerCase()),
+      sorter: (a: any, b: any) => a.parts_number.localeCompare(b.parts_number),
     },
     {
       title: 'TimeStamp',
