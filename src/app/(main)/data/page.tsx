@@ -1,6 +1,6 @@
 "use client";
 import React, {useEffect, useState} from "react";
-import {BiPlusMedical, BiRefresh} from "react-icons/bi";
+import {BiPlusMedical, BiRefresh, BiTrash} from "react-icons/bi";
 import {message, Table} from "antd";
 import {useForm} from "react-hook-form";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
@@ -99,8 +99,8 @@ export default function Data() {
           });
         })
         .finally(() => {
-          setModal(false);
-          reset();
+          // setModal(false);
+          // reset();
         });
   };
 
@@ -187,6 +187,28 @@ export default function Data() {
     setSelectedRowKeys(selectedRowKeys);
   };
 
+  function deleteData() {
+    axiosInstance
+        .delete('/raw',)
+        .then(() => {
+          messageApi.open({
+            type: 'success',
+            content: 'Hapus Data Sukses',
+          });
+          fetchData();
+        })
+        .catch((e) => {
+          messageApi.open({
+            type: 'error',
+            content: 'Gagal Hapus Data',
+          });
+        })
+        .finally(() => {
+          // setModal(false);
+          reset();
+        });
+  }
+
   return (
     <>
       {contextHolder}
@@ -197,25 +219,32 @@ export default function Data() {
 
         <div className="w-full bg-base py-0.5 px-1 text-white flex flex-row">
           <div
-            onClick={() => setModal(true)}
-            className="flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer"
+              onClick={() => setModal(true)}
+              className="flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer"
           >
             <BiPlusMedical size={12}/>
             <p className="text-white font-bold text-sm">Baru</p>
           </div>
           <div
-            onClick={fetchData}
-            className="flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer"
+              onClick={fetchData}
+              className="flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer"
           >
             <BiRefresh size={12}/>
             <p className="text-white font-bold text-sm">Refresh</p>
+          </div>
+          <div
+              onClick={deleteData}
+              className="flex-row flex items-center gap-1 px-3 py-1 hover:bg-[#2589ce] hover:cursor-pointer"
+          >
+            <BiTrash size={12}/>
+            <p className="text-white font-bold text-sm">Hapus Data</p>
           </div>
           {
               selected.length > 0 && <PrintAll data={selected ?? []}/>
           }
         </div>
         <div className="w-full bg-white p-2 flex-grow overflow-hidden">
-            <Table
+          <Table
               loading={loading1}
               bordered
               rowSelection={{
