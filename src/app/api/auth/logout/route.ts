@@ -6,8 +6,6 @@ export async function GET() {
 
   if (session) {
 
-    const idToken = session.id_token
-
     // this will log out the user on Keycloak side
     const url = `${process.env.KEYCLOACK_END_URL}?client_id=vuteq-internal&post_logout_redirect_uri=${encodeURIComponent(process.env.NEXTAUTH_URL!)}`;
 
