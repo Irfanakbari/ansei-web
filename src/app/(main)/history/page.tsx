@@ -81,21 +81,28 @@ export default function History() {
       render: (_: any, __: any, index: any) => (data.currentPage - 1) * data.limit + index + 1
     },
     {
-      title: 'PO Number',
-      dataIndex: 'po_number',
+      title: 'PO ID',
+      dataIndex: 'po_id',
       onFilter: (value: any, record: any) =>
-          record['po_number'].toString().toLowerCase().includes(value.toLowerCase()),
-      sorter: (a: any, b: any) => a.po_number.localeCompare(b.po_number),
+          record['po_id'].toString().toLowerCase().includes(value.toLowerCase()),
+      sorter: (a: any, b: any) => a.po_id.localeCompare(b.po_id),
     },
     {
       title: 'Part Number',
-      dataIndex: 'parts_number',
+      dataIndex: 'part_no',
       onFilter: (value: any, record: any) =>
-          record['parts_number'].toString().toLowerCase().includes(value.toLowerCase()),
-      sorter: (a: any, b: any) => a.parts_number.localeCompare(b.parts_number),
+          record['part_no'].toString().toLowerCase().includes(value.toLowerCase()),
+      sorter: (a: any, b: any) => a.part_no.localeCompare(b.part_no),
     },
     {
-      title: 'TimeStamp',
+      title: 'PO No',
+      dataIndex: 'po_no',
+      onFilter: (value: any, record: any) =>
+          record['po_no'].toString().toLowerCase().includes(value.toLowerCase()),
+      sorter: (a: any, b: any) => a.po_no.localeCompare(b.po_no),
+    },
+    {
+      title: 'Time Stamp',
       dataIndex: 'timestamp',
       sorter: (a: any, b: any) => {
         // Convert the 'keluar' values to Date objects for comparison

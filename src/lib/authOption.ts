@@ -1,5 +1,5 @@
-import { JWT } from "next-auth/jwt";
-import { AuthOptions, CookiesOptions } from "next-auth";
+import {JWT} from "next-auth/jwt";
+import {AuthOptions, CookiesOptions} from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
 const refreshAccessToken = async (token: JWT) => {
@@ -54,53 +54,59 @@ function decodeJwt(token: string) {
 
 export const cookieOption: CookiesOptions = {
   sessionToken: {
-    name: `ansei-vuteq.session-token`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+    name: `app-vuteq.session-token`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
     options: {
       httpOnly: true,
       path: '/',
       secure: false,
+      domain: 'localhost'
     }
   },
   csrfToken: {
-    name: `ansei-vuteq.csrf-token`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+    name: `app-vuteq.csrf-token`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
     options: {
       httpOnly: true,
       path: '/',
       secure: false,
+      domain: 'localhost'
     }
   },
   callbackUrl: {
-    name: `ansei-vuteq.callback-url`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+    name: `app-vuteq.callback-url`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
     options: {
       httpOnly: true,
       path: '/',
       secure: false,
+      domain: 'localhost'
     }
   },
   pkceCodeVerifier: {
-    name: `ansei-vuteq.pkce.code_verifier`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+    name: `app-vuteq.pkce.code_verifier`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
     options: {
       httpOnly: true,
       path: '/',
       secure: false,
-      maxAge: 900
+      maxAge: 900,
+      domain: 'localhost'
     }
   },
   state: {
-    name: `ansei-vuteq.state`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+    name: `app-vuteq.state`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
     options: {
       httpOnly: true,
       path: '/',
       secure: false,
-      maxAge: 900
+      maxAge: 900,
+      domain: 'localhost'
     }
   },
   nonce: {
-    name: `ansei-vuteq.nonce`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
+    name: `app-vuteq.nonce`, // Make sure to add conditional logic so that the name of the cookie does not include `__Secure-` on localhost
     options: {
       httpOnly: true,
       path: '/',
       secure: false,
+      domain: 'localhost'
     }
   }
 }
@@ -160,7 +166,7 @@ export const authOptions: AuthOptions = {
           Date.now() + (account.refresh_expires_in - 15) * 1000;
         token.user = user;
         const decodedToken = decodeJwt(account.access_token)
-        token.user.roles = decodedToken['resource_access']['ansei-system']['roles']
+        token.user.roles = decodedToken['resource_access']['vuteq-internal']['roles']
         return token;
       }
 

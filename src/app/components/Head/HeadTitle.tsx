@@ -1,10 +1,10 @@
 "use client";
-import { FaUserAlt } from "react-icons/fa";
-import { BiSolidDownArrow } from "react-icons/bi";
-import { useState } from "react";
+import {FaHome, FaUserAlt} from "react-icons/fa";
+import {useState} from "react";
 import Image from "next/image";
-import { Dropdown } from "antd";
-import { signOut, useSession } from "next-auth/react";
+import {signOut, useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
+import {Dropdown} from "antd";
 
 async function keycloakSessionLogOut() {
     try {
@@ -17,7 +17,8 @@ async function keycloakSessionLogOut() {
 export default function HeadTitle() {
     const [closeModal, setCloseModal] = useState(false);
     const {data: session} = useSession()
-
+    const router = useRouter()
+    const portal_url = process.env.NEXT_PUBLIC_PORTAL_URL ?? 'https://portal.vuteq.co.id'
     return (
         <>
             {
@@ -51,7 +52,14 @@ export default function HeadTitle() {
                     <Image src="/images/img.png" alt="Logo" width={90} height={30}/>
                     <h2 className="font-bold text-[14px] hidden md:block">PT VUTEQ INDONESIA - Ansei Delivery System</h2>
                 </div>
-                <div className={`hover:cursor-pointer`}>
+                <div className={`flex gap-4 hover:cursor-pointer`} onClick={()=>router.replace(portal_url)}>
+                    <div className="flex flex-row items-center bg-red-500 p-1 rounded">
+                        <FaHome size={10}/>
+                        <h2 className="font-bold text-[14px] mx-2">
+                          Portal
+                        </h2>
+                        {/*<BiSolidDownArrow size={10}/>*/}
+                    </div>
                     <Dropdown
                         menu={{
                             items: [
@@ -65,13 +73,13 @@ export default function HeadTitle() {
                         }}
                         placement="bottom"
                     >
-                        <div className="flex flex-row items-center">
-                            <FaUserAlt size={10}/>
-                            <h2 className="font-bold text-[14px] mx-2">
-                                Halo, {session?.user?.name ?? "-"}
-                            </h2>
-                            <BiSolidDownArrow size={10}/>
-                        </div>
+                    <div className="flex flex-row items-center">
+                        <FaUserAlt size={10}/>
+                        <h2 className="font-bold text-[14px] mx-2">
+                            Halo, {session?.user?.name ?? "-"}
+                        </h2>
+                        {/*<BiSolidDownArrow size={10}/>*/}
+                    </div>
                     </Dropdown>
                 </div>
             </div>

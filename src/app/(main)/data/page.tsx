@@ -99,8 +99,8 @@ export default function Data() {
           });
         })
         .finally(() => {
-          // setModal(false);
-          // reset();
+          setModal(false);
+          reset();
         });
   };
 
@@ -114,71 +114,72 @@ export default function Data() {
       width: 50
     },
     {
+      title: 'PO ID',
+      fixed: 'left',
+      dataIndex: 'po_id',
+      width: 150,
+    },
+    {
       title: 'Date',
       dataIndex: 'date',
       width: 120,
-      render: (text: any) => dayjs(text).format('DD/MM/YYYY'),
-    },
-    {
-      title: 'Vendor Code',
-      dataIndex: 'vendorCode',
-      width: 120,
-    },
-    {
-      title: 'Vendor Name',
-      dataIndex: 'vendorName',
-      width: 220,
-    },
-    {
-      title: 'Receiving Area',
-      dataIndex: 'receivingArea',
-      width: 120,
+      render: (text: any) => dayjs(text).format('YYYYMMDD'),
     },
     {
       title: 'Delivery Date',
-      dataIndex: 'deliveryDate',
+      dataIndex: 'delivery_date',
       width: 120,
       render: (text: any) => dayjs(text).format('DD/MM/YYYY'),
+    },
+    {
+      title: 'Part No',
+      dataIndex: 'part_no',
+      width: 120,
+    },
+    {
+      title: 'Part Name',
+      dataIndex: 'part_name',
+      width: 250,
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      width: 100,
+    },
+    {
+      title: 'ID Part',
+      dataIndex: 'id_part',
+      width: 120,
+    },
+    {
+      title: 'Barcode',
+      dataIndex: 'barcode',
+      width: 150,
+    },
+    {
+      title: 'Receiving Area',
+      dataIndex: 'receiving_area',
+      width: 100,
+    },
+    {
+      title: 'PO No',
+      dataIndex: 'po_no',
+      width: 120,
+    },
+    {
+      title: 'Model',
+      width: 100,
+      dataIndex: 'model',
+    },
+    {
+      title: 'Bagian Part',
+      dataIndex: 'bagian_part',
+      width: 120,
     },
     {
       title: 'Delivery Period',
       width: 130,
-      dataIndex: 'deliveryPeriod',
-    },
-    {
-      title: 'Firm',
-      width: 100,
-      dataIndex: 'firm',
-    },
-    {
-      title: 'Classification',
-      width: 120,
-      dataIndex: 'classification',
-    },
-    {
-      title: 'PO Number',
-      width: 120,
-      dataIndex: 'poNumber',
-    },
-    {
-      title: 'Item',
-      width: 100,
-      dataIndex: 'item',
-    },
-    {
-      title: 'Parts Number',
-      width: 120,
-      dataIndex: 'partsNumber',
-    },
-    {
-      title: 'Parts Name',
-      width: 280,
-      dataIndex: 'partsName',
-    },
-    {
-      title: 'Order Quantity',
-      width: 120,
-      dataIndex: 'orderQuantity',
+      dataIndex: 'delivery_period',
     },
   ];
 
