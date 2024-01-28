@@ -2,7 +2,13 @@ import {JWT} from "next-auth/jwt";
 import {AuthOptions, CookiesOptions} from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
-const refreshAccessToken = async (token: JWT) => {
+// Mendapatkan nilai environment dari variabel lingkungan
+const environment = process.env.NODE_ENV || 'development';
+
+// Menentukan apakah aplikasi berjalan di localhost atau bukan
+const isLocalhost = environment === 'development';
+
+const refreshAccessToken = async (token: JWT): Promise<JWT> => {
   try {
     if (Date.now() > token.refreshTokenExpired) throw Error;
     const details = {
@@ -58,8 +64,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: true,
-      domain: 'vuteq.co.id'
+      secure: !isLocalhost, // Set to true only if not running on localhost
+      domain: isLocalhost ? 'localhost' : 'vuteq.co.id',
     }
   },
   csrfToken: {
@@ -67,8 +73,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: true,
-      domain: 'vuteq.co.id'
+      secure: !isLocalhost, // Set to true only if not running on localhost
+      domain: isLocalhost ? 'localhost' : 'vuteq.co.id',
     }
   },
   callbackUrl: {
@@ -76,8 +82,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: true,
-      domain: 'vuteq.co.id'
+      secure: !isLocalhost, // Set to true only if not running on localhost
+      domain: isLocalhost ? 'localhost' : 'vuteq.co.id',
     }
   },
   pkceCodeVerifier: {
@@ -85,9 +91,9 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: true,
       maxAge: 900,
-      domain: 'vuteq.co.id'
+      secure: !isLocalhost, // Set to true only if not running on localhost
+      domain: isLocalhost ? 'localhost' : 'vuteq.co.id',
     }
   },
   state: {
@@ -95,9 +101,9 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: true,
       maxAge: 900,
-      domain: 'vuteq.co.id'
+      secure: !isLocalhost, // Set to true only if not running on localhost
+      domain: isLocalhost ? 'localhost' : 'vuteq.co.id',
     }
   },
   nonce: {
@@ -105,8 +111,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: true,
-      domain: 'vuteq.co.id'
+      secure: !isLocalhost, // Set to true only if not running on localhost
+      domain: isLocalhost ? 'localhost' : 'vuteq.co.id',
     }
   }
 }
@@ -131,21 +137,23 @@ export const authOptions: AuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 23 * 60 * 60 // 23 hours
   },
-  useSecureCookies: false,
+  useSecureCookies: !isLocalhost,
   callbacks: {
     async signIn({user, account}) {
-      return !!(account && user);
+      if (account && user) {
+        return true;
+      } else {
+        // TODO : Add unauthorized page
+        return '/block';
+      }
     },
-    // async redirect({url, baseUrl}) {
-    //   return url.startsWith(baseUrl) ? url : baseUrl;
-    // },
     async session({session, token}) {
       if (token) {
-        session.id_token = token.id_token
         session.user = token.user;
         session.error = token.error;
-        session.accessToken = token.accessToken;
+        session.accessToken = token.accessToken
       }
       return session;
     },
@@ -165,17 +173,22 @@ export const authOptions: AuthOptions = {
         token.refreshTokenExpired =
           Date.now() + (account.refresh_expires_in - 15) * 1000;
         token.user = user;
-        const decodedToken = decodeJwt(account.access_token)
-        token.user.roles = decodedToken['resource_access']['vuteq-internal']['roles']
+        // const decodedToken = decodeJwt(account.access_token)
+        // token.user = decodedToken['resource_access']['vuteq-internal']['roles']
         return token;
       }
 
-      if (Date.now() < token.accessTokenExpired) {
-        return token;
-      } else  {
-        // Access token has expired, try to update it
-        return refreshAccessToken(token);
-      }
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < token.accessTokenExpired) return token;
+
+      // Access token has expired, try to update it
+      return refreshAccessToken(token);
+
+    },
+  },
+  logger: {
+    error(code, metadata) {
+      console.error(code, metadata)
     },
   },
   pages: {

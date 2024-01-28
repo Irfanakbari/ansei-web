@@ -8,11 +8,10 @@ export default withAuth(
     if (!token ) {
         return NextResponse.rewrite(new URL('/login', req.url))
     }
-      const hasAdmin = token.user.roles.some((role: any) => role === 'ansei-super')
-      const hasPalletControlRoleOperator = token.user.roles.some((role: string) => role.includes('operator'));
-    if (hasPalletControlRoleOperator || !hasAdmin) {
-      return NextResponse.rewrite(new URL('/block', req.url))
-    }
+    // const hasAdmin = token.user.roles.some((role: any) => role === 'ansei-super');
+    // if (!hasAdmin) {
+    //   return NextResponse.rewrite(new URL('/block', req.url))
+    // }
 
   },
   {

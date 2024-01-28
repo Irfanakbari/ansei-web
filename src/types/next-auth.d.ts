@@ -1,20 +1,28 @@
-import { DefaultJWT } from "next-auth/jwt";
-import { DefaultSession, User } from "next-auth";
+import type {User} from 'next-auth';
 
-interface Roles {
-  role?:string[]
+interface Roles{
+  roles: string[]
 }
-declare module "next-auth" {
 
+declare module 'next-auth' {
   /**
-   * Returned by `useSession`, `getSession` and received as
-   * a prop on the `SessionProvider` React Context
+   * Returned by `useSession`, `getSession` and received as a prop on the `Provider` React Context
    */
-  interface Session extends DefaultSession{
-    user: User
+  interface Session {
+    user: {
+      sub: string;
+      email_verified: boolean;
+      name: string;
+      preferred_username: string;
+      given_name: string;
+      family_name: string;
+      email: string;
+      id: string;
+      org_name?: string;
+      telephone?: string;
+    };
     error: string;
     accessToken: string;
-    id_token: string;
   }
   /**
    * The shape of the user object returned in the OAuth providers' `profile` callback,
@@ -31,10 +39,12 @@ declare module "next-auth" {
     family_name: string;
     email: string;
     id: string;
-    roles: string[];
   }
-
-  interface Account{
+  /**
+   * Usually contains information about the provider being used
+   * and also extends `TokenSet`, which is different tokens returned by OAuth Providers.
+   */
+  interface Account {
     provider: string;
     type: string;
     id: string;
@@ -66,18 +76,18 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
-  interface JWT extends DefaultJWT{
+  interface JWT {
     name: string;
-    id_token: string;
     email: string;
     sub: string;
     accessToken: string;
     refreshToken: string;
     accessTokenExpired: number;
     refreshTokenExpired: number;
-    user: User
+    user: User;
     error: string;
+    roles: Roles;
   }
 }

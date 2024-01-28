@@ -17,7 +17,7 @@ export default function Home() {
     } else {
       signIn('keycloak',{prompt: 'none'})
     }
-  }, [status, router, session]);
+  }, [status, session]);
   
   return (
       <>
