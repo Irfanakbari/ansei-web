@@ -1,14 +1,12 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRefreshToken } from "@/lib/hooks/useRefreshToken";
-import { axiosAuth } from "@/lib/axios";
+import {signOut, useSession} from "next-auth/react";
+import {useEffect} from "react";
+import {axiosAuth} from "@/lib/axios";
 
 const useAxiosAuth = () => {
   const { data: session, update } = useSession({
     required: true
   });
-  const refreshToken = useRefreshToken();
 
   useEffect(() => {
     const requestIntercept = axiosAuth.interceptors.request.use(
@@ -43,7 +41,7 @@ const useAxiosAuth = () => {
       axiosAuth.interceptors.request.eject(requestIntercept);
       axiosAuth.interceptors.response.eject(responseIntercept);
     };
-  }, [session, refreshToken]);
+  }, [session]);
 
   return axiosAuth;
 };

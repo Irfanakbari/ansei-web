@@ -58,8 +58,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: false,
-      domain: 'localhost'
+      secure: true,
+      domain: 'vuteq.co.id'
     }
   },
   csrfToken: {
@@ -67,8 +67,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: false,
-      domain: 'localhost'
+      secure: true,
+      domain: 'vuteq.co.id'
     }
   },
   callbackUrl: {
@@ -76,8 +76,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: false,
-      domain: 'localhost'
+      secure: true,
+      domain: 'vuteq.co.id'
     }
   },
   pkceCodeVerifier: {
@@ -85,9 +85,9 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: false,
+      secure: true,
       maxAge: 900,
-      domain: 'localhost'
+      domain: 'vuteq.co.id'
     }
   },
   state: {
@@ -95,9 +95,9 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: false,
+      secure: true,
       maxAge: 900,
-      domain: 'localhost'
+      domain: 'vuteq.co.id'
     }
   },
   nonce: {
@@ -105,8 +105,8 @@ export const cookieOption: CookiesOptions = {
     options: {
       httpOnly: true,
       path: '/',
-      secure: false,
-      domain: 'localhost'
+      secure: true,
+      domain: 'vuteq.co.id'
     }
   }
 }
