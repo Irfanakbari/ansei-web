@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Create a socket connection
-    const socket = io('http://localhost:3000');
+    const socket = io('https://api.vuteq.co.id');
 
     // Listen for incoming messages
     socket.on('message', (message) => {
