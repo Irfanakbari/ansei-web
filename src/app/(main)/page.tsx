@@ -192,7 +192,7 @@ export default function Dashboard() {
                 <div
                     className={`grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-2 grid gap-5 text-white mb-5`}>
                   <Card title={'Statistik Harian'} bordered={true} className={`shadow shadow-gray-400 `}>
-                    <StatBar data={dataChart2}/>
+                    <StatBar data={dataChart2.reverse()}/>
                   </Card>
                   <Card title={'Update Terbaru'} className={`w-full overflow-x-scroll shadow shadow-gray-400`}>
                     <div>
