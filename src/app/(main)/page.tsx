@@ -2,44 +2,65 @@
 import React, {useEffect, useState} from "react";
 import {FullScreen, useFullScreenHandle} from "react-full-screen";
 import Image from "next/image";
-import {BiExitFullscreen, BiFullscreen, BiSolidMoon, BiSolidSun} from "react-icons/bi";
+import {BiCheck, BiCross, BiExitFullscreen, BiFullscreen, BiSolidMoon, BiSolidSun} from "react-icons/bi";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import useTabStore, {TabStore} from "@/app/context/Tab/TabStore";
 import useStore from "@/app/context/Tab/useStore";
-import {Button, Result} from "antd";
-import {SmileOutlined} from "@ant-design/icons";
+import {Card, Statistic, Table} from "antd";
+import {io} from "socket.io-client";
+import {MdPallet} from "react-icons/md";
+import StatBar from "@/app/components/Chart/StatBar";
+import dayjs from "dayjs";
 
 export default function Dashboard() {
   const axiosAuth = useAxiosAuth()
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const [cardInfo, setCardInfo] = useState({
-    stok: '-',
-    total: '-',
-    keluar: '-',
-    repair: '-',
-    mendep: [],
-    totalMendep: 0,
-    isSo: false,
+    total: 0,
+    success: 0,
+    failed: 0,
   })
   const [loading, setLoading] = useState(true)
-  const [dataChart1, setDataChart1] = useState([])
+    const [history, setHistory] = useState([])
   const [dataChart2, setDataChart2] = useState([])
-  const [dataChart3, setDataChart3] = useState([])
   const handle = useFullScreenHandle();
   const tabStore : TabStore| any = useStore(useTabStore, (state) => state)
 
   useEffect(() => {
-    fetchData()
+    // fetchData()
     tabStore?.addTab({
       label: 'Dashboard',
       path: '/',
       id: 'Dashboard'
     })
-    const interval = setInterval(fetchData, 5000); // Panggil fetchData setiap 3 detik
-    return () => {
-      clearInterval(interval); // Hentikan interval saat komponen dibongkar
-    };
+    // const interval = setInterval(fetchData, 5000); // Panggil fetchData setiap 3 detik
+    // return () => {
+    //   clearInterval(interval); // Hentikan interval saat komponen dibongkar
+    // };
   }, [])
+
+  useEffect(() => {
+    // Create a socket connection
+    const socket = io('http://localhost:3000');
+
+    // Listen for incoming messages
+    socket.on('message', (message) => {
+      console.log('Incoming message:', message);
+      setCardInfo({
+        total: message.all.total,
+        success: message.all.success,
+        failed: message.all.failed,
+      })
+      setDataChart2(message.daily)
+        setHistory(message.lastTen)
+      setLoading(false)
+    });
+
+    // Clean up the socket connection on unmount
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
 
   const fetchData = async () => {
@@ -47,33 +68,52 @@ export default function Dashboard() {
       const response = await axiosAuth.get('/dashboard',{
         cache: false
       });
-      // setCardInfo({
-      //   stok: response.data['data']['totalStokPallet'] ?? '-',
-      //   total: response.data['data']['totalPallet'] ?? '-',
-      //   keluar: response.data['data']['totalPalletKeluar'] ?? '-',
-      //   repair: response.data['data']['totalPalletRepair'] ?? '-',
-      //   totalMendep: response.data['data']['totalPaletMendep'] ?? 0,
-      //   mendep: response.data['data']['paletMendep'] ?? [],
-      //   isSo: response.data['data']['isSo'] ?? false,
-      // })
-      // // setHistory(response.data['data']['historyPallet'] ?? [])
-      // setDataChart1(response.data.data['stokPart'] ?? [])
       setDataChart2(response.data['dayStat'] ?? [])
-      setDataChart3(response.data['successRate'] ?? [])
+      // setDataChart3(response.data['successRate'] ?? [])
     } catch (e: any) {
       // showErrorToast("Gagal Fetch Data");
     } finally {
       setLoading(false)
     }
   }
+  const columns = [
+    {
+      title: '#',
+      dataIndex: 'id',
+      width: '5%',
+      render: (_: any, __: any, index: any) => index + 1
+    },
+    {
+      title: 'PO No',
+      dataIndex: 'po_no',
+      width: '25%',
+    },
+    {
+      title: 'Part No',
+      dataIndex: 'part_no',
+    },
+    {
+      title: 'Timestamp',
+      dataIndex: 'timestamp',
+      render: (_: any, record: any) => record.timestamp && dayjs(record.timestamp).format('DD-MMMM-YYYY  HH:MM')
+    },
+    {
+      title: 'Operator',
+      dataIndex: 'operator',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+    },
+  ];
   return (
     <>
       <>
         <div className={`bg-white h-full flex flex-col`}>
-          <FullScreen handle={handle} className={`w-full p-2 flex-grow overflow-hidden ${
-            handle.active ? dark ? 'dark' : 'bg-white' : 'bg-white'}`}>
+          <FullScreen handle={handle} className={`w-full p-2 flex-grow bg-white overflow-hidden${
+            handle.active ? dark ? '' : 'bg-white' : 'bg-white'}`}>
             <div className={`py-1.5 px-2 text-white flex flex-row justify-between ${
-              handle.active ? dark ? 'bg-tremor-background-emphasis' : 'bg-[#2589ce]' : 'bg-[#2589ce]'}`}>
+              handle.active ? dark ? '' : 'bg-[#2589ce]' : 'bg-[#2589ce]'}`}>
               <div className={`flex flex-row justify-between w-full mr-1 items-center`}>
                 <div className={`flex items-center gap-4`}>
                   <Image src={'/images/img.png'} alt={'Logo'} width={90} height={80}/>
@@ -87,7 +127,7 @@ export default function Dashboard() {
                     className={`flex items-center`}>
                     <BiSolidSun size={20}/>
                   </div> : <div
-                    onClick={() => setDark(true)}
+                    onClick={() => setDark(false)}
                     className={`flex items-center`}>
                     <BiSolidMoon size={20}/>
                   </div>
@@ -108,6 +148,83 @@ export default function Dashboard() {
               overflowY: 'scroll',
               paddingBottom: handle.active ? '8vh' : '5vh'
             }}>
+              <div
+                  className={`flex flex-col gap-5 text-white mt-1 mb-5`}>
+                <div
+                    className={`grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 pt-2 grid gap-5 text-white mb-5`}>
+                  <Card bordered={true} className={`shadow shadow-gray-400`}>
+                    <Statistic
+                        title="Total Data"
+                        value={cardInfo.total}
+                        precision={0}
+                        loading={loading}
+                        groupSeparator={'.'}
+                        valueStyle={{color: 'deepskyblue'}}
+                        prefix={<MdPallet/>}
+                        suffix="Data"
+                    />
+                  </Card>
+                  <Card bordered={true} className={`shadow shadow-gray-400`}>
+                    <Statistic
+                        title="Berhasil Scan"
+                        value={cardInfo.success}
+                        loading={loading}
+                        precision={0}
+                        groupSeparator={'.'}
+                        valueStyle={{color: '#3f8600'}}
+                        prefix={<BiCheck/>}
+                        suffix="Data"
+                    />
+                  </Card>
+                  <Card bordered={true} className={`shadow shadow-gray-400`}>
+                    <Statistic
+                        title="Gagal Scan"
+                        value={cardInfo.failed}
+                        loading={loading}
+                        precision={0}
+                        groupSeparator={'.'}
+                        valueStyle={{color: 'orangered'}}
+                        prefix={<BiCross/>}
+                        suffix="Data"
+                    />
+                  </Card>
+                </div>
+                <div
+                    className={`grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 pt-2 grid gap-5 text-white mb-5`}>
+                  <Card title={'Statistik Harian'} bordered={true} className={`shadow shadow-gray-400 `}>
+                    <StatBar data={dataChart2}/>
+                  </Card>
+                  <Card title={'Update Terbaru'} className={`w-full overflow-x-scroll shadow shadow-gray-400`}>
+                    <div>
+                      <Table
+                          loading={loading}
+                          bordered
+                          rowKey={'id_pallet'} columns={columns} dataSource={history} size={'small'}
+                          rowClassName="editable-row"
+                          pagination={false}/>
+                    </div>
+                  </Card>
+                  {/*<Card title={'Tingkat Keberhasilan Scan'} bordered={true} className={`shadow shadow-gray-400 col-span-1`}>*/}
+                  {/*  <BarPie data={dataChart3}  />*/}
+                  {/*</Card>*/}
+                </div>
+                {/*<div*/}
+                {/*    className={`grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 pt-2 grid gap-5 text-white mb-5`}>*/}
+                {/*  /!*<Card title={'Update Terbaru'} className={`w-full overflow-x-scroll mb-5 shadow shadow-gray-400`}>*!/*/}
+                {/*  /!*  <div>*!/*/}
+                {/*  /!*    <Table*!/*/}
+                {/*  /!*        loading={loading}*!/*/}
+                {/*  /!*        bordered*!/*/}
+                {/*  /!*        rowKey={'id_pallet'} columns={columns} dataSource={history} size={'small'}*!/*/}
+                {/*  /!*        rowClassName="editable-row"*!/*/}
+                {/*  /!*        pagination={false}/>*!/*/}
+                {/*  /!*  </div>*!/*/}
+                {/*  /!*</Card>*!/*/}
+                {/*  /!*<Card title={'Tingkat Keberhasilan Scan'} bordered={true} className={`shadow shadow-gray-400 col-span-1`}>*!/*/}
+                {/*  /!*  <BarPie data={dataChart3}  />*!/*/}
+                {/*  /!*</Card>*!/*/}
+                {/*</div>*/}
+              </div>
               {/*<div className={`grid-cols-1 lg:grid-cols-3 pt-2 grid gap-5 mb-5`}>*/}
               {/*  <Card title={'Statistik Harian'} bordered={true} className={`shadow shadow-gray-400 col-span-2`}>*/}
               {/*    <StatBar data={dataChart2}  />*/}
@@ -119,11 +236,11 @@ export default function Dashboard() {
               {/*  /!*  <GroupBar data={dataChart1}  />*!/*/}
               {/*  /!*</Card>*!/*/}
               {/*</div>*/}
-              <Result
-                  icon={<SmileOutlined />}
-                  title="Great, we have done all the operations!"
-                  extra={<Button type="primary">Next</Button>}
-              />
+              {/*<Result*/}
+              {/*    icon={<SmileOutlined/>}*/}
+              {/*    title="Great, we have done all the operations!"*/}
+              {/*    extra={<Button type="primary">Next</Button>}*/}
+              {/*/>*/}
             </div>
           </FullScreen>
         </div>
