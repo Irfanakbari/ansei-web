@@ -6,10 +6,12 @@ import {BiCheck, BiCross, BiExitFullscreen, BiFullscreen, BiSolidMoon, BiSolidSu
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import useTabStore, {TabStore} from "@/app/context/Tab/TabStore";
 import useStore from "@/app/context/Tab/useStore";
-import {Card, Statistic, Table} from "antd";
+import {Alert, Card, Statistic, Table} from "antd";
 import {io} from "socket.io-client";
 import {MdPallet} from "react-icons/md";
 import dayjs from "dayjs";
+import Marquee from 'react-fast-marquee';
+import {WarningFilled} from "@ant-design/icons";
 
 export default function Dashboard() {
   const axiosAuth = useAxiosAuth()
@@ -153,6 +155,18 @@ export default function Dashboard() {
             }}>
               <div
                   className={`flex flex-col gap-5 text-white mt-1 mb-5`}>
+                <Alert
+                    type={'error'}
+                    closable={false}
+                    icon={<WarningFilled style={{ color: 'white' }} />}
+                    className={'bg-red-400 text-white'}
+                    banner
+                    message={
+                      <Marquee className={'text-xl'} pauseOnHover gradient={false}>
+                        Harap Di Pastikan Melakukan Scan Dengan Benar Dan Lakukan Double Crosscheck, Hindari Terjadi Masalah Dalam Pengiriman
+                      </Marquee>
+                    }
+                />
                 <div
                     className={`grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 pt-2 grid gap-5 text-white mb-5`}>
                   <Card bordered={true} className={`shadow shadow-gray-400`}>
